@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "920618905625",
+    "firebase_url": "https://ratapp-af7cf.firebaseio.com",
+    "project_id": "ratapp-af7cf",
+    "storage_bucket": "ratapp-af7cf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920618905625:android:081334178b692c95",
+        "android_client_info": {
+          "package_name": "cs2340.theratpack.ratapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "920618905625-t1hjc6hhdhacl20rpflmei9ocm9l3enk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cs2340.theratpack.ratapp",
+            "certificate_hash": "fb7dff920ffa4887b75c8b3158a0621baabed40a"
+          }
+        },
+        {
+          "client_id": "920618905625-u52755pfob95nbb2ctqiqrcl9k5ugo8d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9w6Q5DtN1WIRGtBOxzBJyv_rgu7jG_tY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "920618905625-u52755pfob95nbb2ctqiqrcl9k5ugo8d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
