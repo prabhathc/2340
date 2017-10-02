@@ -242,7 +242,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             //TODO: Implement actual create user/sign in in M5
 
             if (newUser) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
                 //createUser(email, password);
             } else {
                 if (email.equals("user") && password.equals("pass")) {
