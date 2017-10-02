@@ -26,7 +26,7 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-    public void attemptRegister() {
+    private void attemptRegister() {
         //check if information is entered
         EditText nameEditText = (EditText) findViewById(R.id.registration_name);
         String name = nameEditText.getText().toString();
@@ -39,32 +39,33 @@ public class RegistrationActivity extends AppCompatActivity {
 
         boolean cancel = false;
 
-        if (name.matches("")) {
+        if (name.matches("") && !cancel) {
             Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show();
             cancel = true;
         }
-        if (username.matches("")) {
+        if (username.matches("") && !cancel) {
             Toast.makeText(this, "Please enter a username", Toast.LENGTH_SHORT).show();
             cancel = true;
         }
-        if (password.matches("")) {
+        if (password.matches("") && !cancel) {
             Toast.makeText(this, "Please enter a password", Toast.LENGTH_SHORT).show();
             cancel = true;
-        }if (repassword.matches("")) {
+        }
+        if (repassword.matches("") && !cancel) {
             Toast.makeText(this, "Please retype password", Toast.LENGTH_SHORT).show();
             cancel = true;
         }
-        if(!repassword.equals(password)) {
+        if(!repassword.equals(password) && !cancel) {
             Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
             cancel = true;
         }
 
-        if (cancel == false) {
+        if (!cancel) {
             register(name, username, password);
         }
     }
 
-    public void register(String name, String username, String password) {
+    private void register(String name, String username, String password) {
         //store information
         Toast.makeText(this, "works", Toast.LENGTH_SHORT).show();
     }
