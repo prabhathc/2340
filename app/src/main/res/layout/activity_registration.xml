@@ -12,8 +12,10 @@
 
     <ScrollView
         android:id="@+id/registration_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="336dp"
+        android:layout_height="463dp"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
 
         <LinearLayout
             android:id="@+id/email_registration_form"
@@ -26,10 +28,10 @@
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/registration_name"
+                    android:id="@+id/registration_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Name"
+                    android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true" />

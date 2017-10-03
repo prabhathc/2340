@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     // UI references.
-    private AutoCompleteTextView mUsernameView;
+    private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin(false);
+                    attemptLogin();
                     return true;
                 }
                 return false;
@@ -128,14 +128,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin(false);
+                attemptLogin();
             }
         });
 
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin(true);
+                startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
             }
         });
 
@@ -168,7 +168,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             return true;
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mUsernameView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
@@ -201,17 +201,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin(boolean newUser) {
+    private void attemptLogin() {
         if (mAuthTask != null) {
             return;
         }
 
         // Reset errors.
-        mUsernameView.setError(null);
+        mEmailView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mUsernameView.getText().toString();
+        String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -224,10 +224,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
         }
 
-        // Checks that things were typed
+        // Checks that things were typedrhi
         if (TextUtils.isEmpty(email)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
-            focusView = mUsernameView;
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
             cancel = true;
         }
 
@@ -239,34 +239,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            //TODO: Implement actual create user/sign in in M5
-
-            if (newUser) {
-                startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
-                //createUser(email, password);
-            } else {
-                if (email.equals("user") && password.equals("pass")) {
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                } else {
-                    showProgress(false);
-                    Toast.makeText(LoginActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
-                }
-                //signIn(email, password);
-            }
+            signIn(email, password);
 
         }
-    }
-
-    private void createUser(String email, String password) {
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG, "createdUserWithEmail:onComplete:" + task.isSuccessful());
-                if (!task.isSuccessful()) {
-                    Toast.makeText(LoginActivity.this, "Authentication failed: ", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
     private void signIn(String email, String password) {
@@ -276,9 +251,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
                 if (!task.isSuccessful()) {
                     Log.w(TAG, "signInWithEmail:failed", task.getException());
-                    Toast.makeText(LoginActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
                 } else {
-                    //TODO: Load user into local userclass
+                    showProgress(false);
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
             }
         });
@@ -361,7 +337,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
-        mUsernameView.setAdapter(adapter);
+        mEmailView.setAdapter(adapter);
     }
 
 
