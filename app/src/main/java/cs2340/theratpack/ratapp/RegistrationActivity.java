@@ -20,12 +20,18 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.sql.Timestamp;
+
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -39,13 +45,18 @@ public class RegistrationActivity extends AppCompatActivity {
      */
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private UserLoginTask mAuthTask = null;
+
+    private DatabaseReference mDatabase;
 
     private EditText mEmailView;
     private EditText mUsernameView;
     private EditText mPasswordView;
     private EditText mPasswordView2;
+    private ToggleButton mAdminToggle;
     private View mRegistrationFormView;
+
+    private String username;
+    private boolean isAdmin;
 
 
     @Override
@@ -57,6 +68,8 @@ public class RegistrationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -64,7 +77,11 @@ public class RegistrationActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" +user.getUid());
+                    Log.d(TAG, "onAuthStateChanged:registered:" +user.getUid());
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    mDatabase.child("users").child(user.getUid()).child("username").setValue(username);
+                    mDatabase.child("users").child(user.getUid()).child("admin").setValue(isAdmin);
+                    mDatabase.child("users").child(user.getUid()).child("last-attempt").setValue(timestamp);
                 } else {
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
@@ -88,13 +105,11 @@ public class RegistrationActivity extends AppCompatActivity {
 
         mPasswordView = (EditText) findViewById(R.id.registration_password);
         mPasswordView2 = (EditText) findViewById(R.id.registration_password_redo);
+        mAdminToggle = (ToggleButton) findViewById(R.id.registration_admin_toggle);
 
     }
 
     private void attemptRegister() {
-        if (mAuthTask != null) {
-            return;
-        }
 
         //Reset errors
         mEmailView.setError(null);
@@ -104,7 +119,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
         //check if information is entered
         String email = mEmailView.getText().toString();
-        String username = mUsernameView.getText().toString();
+        username = mUsernameView.getText().toString();
+        isAdmin = mAdminToggle.isChecked();
         String password = mPasswordView.getText().toString();
         String repassword = mPasswordView2.getText().toString();
 
@@ -157,50 +173,5 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-        }
     }
 }
