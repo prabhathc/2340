@@ -22,16 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.sql.Timestamp;
-
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -40,13 +30,6 @@ public class RegistrationActivity extends AppCompatActivity {
      */
 
     private static final String TAG = "RegistrationActivity";
-    /**
-     * Firebase authentication stuff
-     */
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-
-    private DatabaseReference mDatabase;
 
     private EditText mEmailView;
     private EditText mUsernameView;
@@ -55,38 +38,14 @@ public class RegistrationActivity extends AppCompatActivity {
     private ToggleButton mAdminToggle;
     private View mRegistrationFormView;
 
-    private String username;
-    private boolean isAdmin;
-
-
     @Override
     public void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    Log.d(TAG, "onAuthStateChanged:registered:" +user.getUid());
-                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                    mDatabase.child("users").child(user.getUid()).child("username").setValue(username);
-                    mDatabase.child("users").child(user.getUid()).child("admin").setValue(isAdmin);
-                    mDatabase.child("users").child(user.getUid()).child("last-attempt").setValue(timestamp);
-                } else {
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-            }
-        };
 
         setContentView(R.layout.activity_registration);
 
@@ -119,8 +78,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
         //check if information is entered
         String email = mEmailView.getText().toString();
-        username = mUsernameView.getText().toString();
-        isAdmin = mAdminToggle.isChecked();
+        String username = mUsernameView.getText().toString();
+        UserType userType = mAdminToggle.isChecked() ? UserType.ADMIN : UserType.USER;
         String password = mPasswordView.getText().toString();
         String repassword = mPasswordView2.getText().toString();
 
@@ -156,22 +115,13 @@ public class RegistrationActivity extends AppCompatActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
-            createUser(email, username, password);
+            createUser(email, username, password, userType);
         }
     }
 
 
-    private void createUser(String email, String username,  String password) {
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG, "createdUserWithEmail:onComplete:" + task.isSuccessful());
-                if (!task.isSuccessful()) {
-                    Toast.makeText(RegistrationActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
-                } else {
-                    startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
-                }
-            }
-        });
+    private void createUser(String email, String username,  String password, UserType userType) {
+        User user = new User(username, email, password, userType);
+        user.register(RegistrationActivity.this, new Intent(RegistrationActivity.this, MainActivity.class));
     }
 }
