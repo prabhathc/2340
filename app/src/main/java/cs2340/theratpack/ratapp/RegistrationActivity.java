@@ -1,19 +1,52 @@
 package cs2340.theratpack.ratapp;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
+
 
 public class RegistrationActivity extends AppCompatActivity {
+
+    /**
+     * Keep track of the login task to ensure we can cancel it if requested.
+     */
+
+    private static final String TAG = "RegistrationActivity";
+
+    private EditText mEmailView;
+    private EditText mUsernameView;
+    private EditText mPasswordView;
+    private EditText mPasswordView2;
+    private ToggleButton mAdminToggle;
+    private View mRegistrationFormView;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_registration);
 
         //this is where the actual button clicking occurs
@@ -24,49 +57,71 @@ public class RegistrationActivity extends AppCompatActivity {
                 attemptRegister();
             }
         });
+
+        mRegistrationFormView = findViewById(R.id.registration_form);
+        mEmailView = (EditText) findViewById(R.id.registration_email);
+        mUsernameView = (EditText) findViewById(R.id.registration_username);
+
+        mPasswordView = (EditText) findViewById(R.id.registration_password);
+        mPasswordView2 = (EditText) findViewById(R.id.registration_password_redo);
+        mAdminToggle = (ToggleButton) findViewById(R.id.registration_admin_toggle);
+
     }
 
     private void attemptRegister() {
-        //check if information is entered
-        EditText nameEditText = (EditText) findViewById(R.id.registration_name);
-        String name = nameEditText.getText().toString();
-        EditText usernameEditText = (EditText) findViewById(R.id.registration_username);
-        String username = usernameEditText.getText().toString();
-        EditText passwordEditText = (EditText) findViewById(R.id.registration_password);
-        String password = passwordEditText.getText().toString();
-        EditText repasswordEditText = (EditText) findViewById(R.id.registration_password_redo);
-        String repassword = repasswordEditText.getText().toString();
 
+        //Reset errors
+        mEmailView.setError(null);
+        mUsernameView.setError(null);
+        mPasswordView.setError(null);
+        mPasswordView2.setError(null);
+
+        //check if information is entered
+        String email = mEmailView.getText().toString();
+        String username = mUsernameView.getText().toString();
+        UserType userType = mAdminToggle.isChecked() ? UserType.ADMIN : UserType.USER;
+        String password = mPasswordView.getText().toString();
+        String repassword = mPasswordView2.getText().toString();
+
+        View focusView = null;
         boolean cancel = false;
 
-        if (name.matches("") && !cancel) {
-            Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show();
+        // Checks that things were typed
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
             cancel = true;
         }
-        if (username.matches("") && !cancel) {
-            Toast.makeText(this, "Please enter a username", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(username)) {
+            mUsernameView.setError(getString(R.string.error_field_required));
+            focusView = mUsernameView;
             cancel = true;
         }
-        if (password.matches("") && !cancel) {
-            Toast.makeText(this, "Please enter a password", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(password)) {
+            mPasswordView.setError(getString(R.string.error_field_required));
+            focusView = mPasswordView;
             cancel = true;
         }
-        if (repassword.matches("") && !cancel) {
-            Toast.makeText(this, "Please retype password", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(repassword)) {
+            mPasswordView2.setError(getString(R.string.error_field_required));
+            focusView = mPasswordView2;
             cancel = true;
-        }
-        if(!repassword.equals(password) && !cancel) {
-            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+        } else if(!repassword.equals(password)) {
+            mPasswordView2.setError("Password not matching");
+            focusView = mPasswordView2;
             cancel = true;
         }
 
-        if (!cancel) {
-            register(name, username, password);
+        if (cancel) {
+            focusView.requestFocus();
+        } else {
+            createUser(email, username, password, userType);
         }
     }
 
-    private void register(String name, String username, String password) {
-        //store information
-        Toast.makeText(this, "works", Toast.LENGTH_SHORT).show();
+
+    private void createUser(String email, String username,  String password, UserType userType) {
+        User user = new User(username, email, password, userType);
+        user.register(RegistrationActivity.this, new Intent(RegistrationActivity.this, MainActivity.class));
     }
 }
