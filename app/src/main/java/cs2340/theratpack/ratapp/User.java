@@ -110,12 +110,18 @@ public class User {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                lastLoginAttempt = new Timestamp(System.currentTimeMillis());
-                uid = mAuth.getCurrentUser().getUid();
-                setupReadListeners();
-                mDatabase.child("users").child(uid).child("last-attempt").setValue(lastLoginAttempt.toString());
-                Log.w(TAG, "login: success");
-                context.startActivity(intent);
+                if (task.isSuccessful()) {
+
+                    lastLoginAttempt = new Timestamp(System.currentTimeMillis());
+                    uid = mAuth.getCurrentUser().getUid();
+                    setupReadListeners();
+                    mDatabase.child("users").child(uid).child("last-attempt").setValue(lastLoginAttempt.toString());
+                    Log.w(TAG, "login: success");
+                    context.startActivity(intent);
+                } else {
+                    Toast.makeText(context, "Authentication failed.",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
