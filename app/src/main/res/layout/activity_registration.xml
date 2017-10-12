@@ -12,8 +12,11 @@
 
     <ScrollView
         android:id="@+id/registration_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="336dp"
+        android:layout_height="463dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
 
         <LinearLayout
             android:id="@+id/email_registration_form"
@@ -26,10 +29,10 @@
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/registration_name"
+                    android:id="@+id/registration_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Name"
+                    android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true" />
@@ -86,15 +89,29 @@
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
-
-            <Button
-                android:id="@+id/register_button"
-                style="?android:textAppearanceSmall"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Register"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content">
+
+                <ToggleButton
+                    android:id="@+id/registration_admin_toggle"
+                    android:textOff="User"
+                    android:textOn="Admin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:id="@+id/register_button"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:text="Register"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+
+
 
         </LinearLayout>
     </ScrollView>
