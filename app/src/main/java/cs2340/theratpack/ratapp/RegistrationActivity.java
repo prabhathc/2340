@@ -47,7 +47,7 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-<<<<<<< Updated upstream
+/*<<<<<<< Updated upstream
 =======
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
@@ -64,7 +64,7 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         };
 
->>>>>>> Stashed changes
+>>>>>>> Stashed changes*/
         setContentView(R.layout.activity_registration);
 
         //this is where the actual button clicking occurs
@@ -138,28 +138,9 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
 
-<<<<<<< Updated upstream
+//<<<<<<< Updated upstream
     private void createUser(String email, String username,  String password, UserType userType) {
         User user = new User(username, email, password, userType);
         user.register(RegistrationActivity.this, new Intent(RegistrationActivity.this, MainActivity.class));
-=======
-    private void createUser(String email, final String username,  String password) {
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                String uid = mAuth.getCurrentUser().getUid();
-                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                mDatabase.child("users").child(uid).child("username").setValue(username);
-                mDatabase.child("users").child(uid).child("admin").setValue(isAdmin);
-                mDatabase.child("users").child(uid).child("last-attempt").setValue(timestamp.toString());
-                Log.d(TAG, "createdUserWithEmail:onComplete:" + task.isSuccessful());
-                if (!task.isSuccessful()) {
-                    Toast.makeText(RegistrationActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
-                } else {
-                    startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
-                }
-            }
-        });
->>>>>>> Stashed changes
     }
 }

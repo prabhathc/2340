@@ -44,37 +44,48 @@ public class User {
     private UserType type;
 
     //possible additional constructor for user-user interaction where we dont have email/pass, only
-    //uid or username or somethign like that
+    //uid or username or something like that
 
-    //constructor for login attempts
+    /**
+     * Constructor for login. If explicitly using this one, always call login next
+     * @param email
+     * @param password
+     */
     public User(String email, String password) {
         this.email = email;
         this.password = password;
         this.mDatabase = FirebaseDatabase.getInstance().getReference();
 
-
-
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                Log.d(TAG, "We in this bitch");
+                Log.d(TAG, "AuthState changed");
 
             }
         };
         mAuth.addAuthStateListener(mAuthListener);
-
     }
 
-    //constructor for registration attempts
+    /**
+     * Constructor used for when registering a user. Always call register after this to get uid
+     * @param username intended username
+     * @param email user email address
+     * @param password user password
+     * @param type admin or standard user
+     */
     public User(String username, String email, String password, UserType type) {
-        //Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         this(email, password);
         this.username = username;
         this.type = type;
         this.loginAttempts = 0;
     }
 
+    /**
+     * Attempts to register the user via firebase, then moves on to the next screen
+     * @param context the current screen
+     * @param intent the intended screen
+     */
     public void register(final Context context, final Intent intent) {
         lastLoginAttempt = new Timestamp(System.currentTimeMillis());
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -89,7 +100,7 @@ public class User {
                             mDatabase.child("users").child(uid).child("admin").setValue(isAdmin());
                             mDatabase.child("users").child(uid).child("last-attempt").setValue(lastLoginAttempt.toString());
                             mDatabase.child("users").child(uid).child("username").setValue(username);
-                           // mDatabase.child("usernames").push().setValue(username);
+                            mDatabase.child("usernames").child(username).setValue(uid);
                             Log.w(TAG, "registration: success. UID: " + uid);
                             context.startActivity(intent);
                             // Sign in success, update UI with the signed-in user's information
@@ -99,13 +110,17 @@ public class User {
                             Log.w(TAG, "createUserWithEmail:failure" + email, task.getException());
                             Toast.makeText(context, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            //pdateUI(null);
                         }
 
                     }
                 });
     }
 
+    /**
+     * Attempts login, and goes on to next screen if successful
+     * @param context current screen
+     * @param intent next intended screen
+     */
     public void login(final Context context, final Intent intent) {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -159,9 +174,6 @@ public class User {
         this.loginAttempts++;
     }
 
-    //public void registerUser() {
-
-    //}
 
     /**
      * Method to return whether or not a given user is an admin

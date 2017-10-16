@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-<<<<<<< Updated upstream
+/*<<<<<<< Updated upstream
 
 =======
                 FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 } else {
                     Log.d(TAG, "onAuthStateChanged:logout");
                 }
->>>>>>> Stashed changes
+>>>>>>> Stashed changes*/
             }
         };
 
@@ -242,11 +242,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void signIn(String email, String password) {
-<<<<<<< Updated upstream
+//<<<<<<< Updated upstream
         User user = new User(email, password);
         showProgress(false);
         user.login(LoginActivity.this, new Intent(LoginActivity.this, MainActivity.class));
-=======
+/*=======
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -261,7 +261,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }
         });
->>>>>>> Stashed changes
+>>>>>>> Stashed changes*/
     }
 
 
