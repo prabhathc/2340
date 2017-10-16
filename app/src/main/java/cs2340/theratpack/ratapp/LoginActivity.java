@@ -244,6 +244,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void signIn(String email, String password) {
 <<<<<<< Updated upstream
         User user = new User(email, password);
+        showProgress(false);
         user.login(LoginActivity.this, new Intent(LoginActivity.this, MainActivity.class));
 =======
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
