@@ -92,7 +92,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+<<<<<<< Updated upstream
 
+=======
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    Log.d(TAG, "onAuthStateChanged:login" +user.getUid());
+                } else {
+                    Log.d(TAG, "onAuthStateChanged:logout");
+                }
+>>>>>>> Stashed changes
             }
         };
 
@@ -233,8 +242,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void signIn(String email, String password) {
+<<<<<<< Updated upstream
         User user = new User(email, password);
         user.login(LoginActivity.this, new Intent(LoginActivity.this, MainActivity.class));
+=======
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+                if (!task.isSuccessful()) {
+                    Log.w(TAG, "signInWithEmail:failed", task.getException());
+                    Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+                } else {
+                    showProgress(false);
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                }
+            }
+        });
+>>>>>>> Stashed changes
     }
 
 
