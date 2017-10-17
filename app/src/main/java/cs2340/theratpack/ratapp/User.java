@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Timestamp;
+import java.util.Iterator;
 
 /** Model for the user class
  * Created by Jamal Paden on 9/28/2017.
@@ -54,7 +55,8 @@ public class User {
     public User(String email, String password) {
         this.email = email;
         this.password = password;
-        this.mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -141,6 +143,7 @@ public class User {
         });
     }
 
+    //this is still a work in progress lol
     private void setupReadListeners() {
         DatabaseReference user = mDatabase.child("users").child(uid);
         user.child("username").addListenerForSingleValueEvent(new ValueEventListener() {
