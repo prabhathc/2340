@@ -1,5 +1,4 @@
 package cs2340.theratpack.ratapp;
-import java.*;
 
 /**
  * Created by prabhath on 10/11/2017.
