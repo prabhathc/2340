@@ -1,4 +1,6 @@
 package cs2340.theratpack.ratapp;
+import com.google.firebase.database.DataSnapshot;
+
 import java.*;
 
 /**
@@ -6,17 +8,46 @@ import java.*;
  */
 
 public class Rat {
-    private int uniqueKey;
+    private static final String TAG = "Rat";
+    private String uniqueKey;
     private String createdDate;
     private String locationType;
-    private int incidentZip;
+    private String incidentZip;
     private String incidentAddress;
     private String city;
     private String borough;
     private double latitude;
     private double longitude;
+    private DataSnapshot ratData;
 
-    public Rat(int uniqueKey, String createdDate, String locationType, int incidentZip, String incidentAddress, String city, String borough, double longitude, double latitude) {
+    /**
+     * Call this when you're pulling from firebase
+     * @param ratData this is the object from firebase if youre pulling rat data down
+     */
+    public Rat(DataSnapshot ratData) {
+        this(ratData.getKey(), (String)ratData.child("Created Date").getValue(),
+                (String)ratData.child("Location Type").getValue(), (String)ratData.child("Incident Zip").getValue(),
+                (String)ratData.child("Incident Address").getValue(), (String)ratData.child("City").getValue(),
+                (String)ratData.child("Borough").getValue(), Double.parseDouble((String)ratData.child("Longitude").getValue()),
+                Double.parseDouble((String)ratData.child("Latitude").getValue()));
+        this.ratData = ratData;
+    }
+
+    /**
+     * Call this explicitly if you're creating a rat sighting. Follow it up with pushing to the database
+     * @param uniqueKey key in firebase
+     * @param createdDate date the sighting ocurred
+     * @param locationType
+     * @param incidentZip
+     * @param incidentAddress
+     * @param city
+     * @param borough
+     * @param longitude
+     * @param latitude
+     */
+    public Rat(String uniqueKey, String createdDate, String locationType, String incidentZip,
+               String incidentAddress, String city, String borough, double longitude,
+               double latitude) {
         this.uniqueKey = uniqueKey;
         this.createdDate = createdDate;
         this.locationType = locationType;
@@ -28,7 +59,7 @@ public class Rat {
         this.longitude = longitude;
     }
 
-    public void setUniqueKey(int newKey) {
+    public void setUniqueKey(String newKey) {
         uniqueKey = newKey;
     }
 
@@ -40,7 +71,7 @@ public class Rat {
         locationType = newLocType;
     }
 
-    public void setIncidentZip(int newZip) {
+    public void setIncidentZip(String newZip) {
         incidentZip = newZip;
     }
 
@@ -64,7 +95,7 @@ public class Rat {
         longitude = newLong;
     }
 
-    public int getUniqueKey() {
+    public String getUniqueKey() {
         return uniqueKey;
     }
 
@@ -76,7 +107,7 @@ public class Rat {
         return locationType;
     }
 
-    public int getIncidentZip() {
+    public String getIncidentZip() {
         return incidentZip;
     }
 
@@ -99,5 +130,7 @@ public class Rat {
     public double getLongitude() {
         return longitude;
     }
+
+    public String toString() { return uniqueKey; }
 
 }

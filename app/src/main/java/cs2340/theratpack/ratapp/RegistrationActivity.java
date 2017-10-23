@@ -22,6 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -30,7 +36,8 @@ public class RegistrationActivity extends AppCompatActivity {
      */
 
     private static final String TAG = "RegistrationActivity";
-
+    private DatabaseReference mDatabase;
+    private Iterable<DataSnapshot> usernames;
     private EditText mEmailView;
     private EditText mUsernameView;
     private EditText mPasswordView;
@@ -49,6 +56,21 @@ public class RegistrationActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_registration);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        mDatabase.child("usernames").addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        usernames = dataSnapshot.getChildren();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
         //this is where the actual button clicking occurs
         Button registerButton = (Button) findViewById(R.id.register_button);
         registerButton.setOnClickListener(new OnClickListener() {
@@ -83,6 +105,14 @@ public class RegistrationActivity extends AppCompatActivity {
         String password = mPasswordView.getText().toString();
         String repassword = mPasswordView2.getText().toString();
 
+        boolean usernameExists = false;
+
+        for(DataSnapshot fbUsername : usernames) {
+            if (username.equals((String)fbUsername.getKey())) {
+                usernameExists = true;
+            }
+        }
+
         View focusView = null;
         boolean cancel = false;
 
@@ -94,6 +124,10 @@ public class RegistrationActivity extends AppCompatActivity {
         }
         if (TextUtils.isEmpty(username)) {
             mUsernameView.setError(getString(R.string.error_field_required));
+            focusView = mUsernameView;
+            cancel = true;
+        } else if (usernameExists) {
+            mUsernameView.setError(getString(R.string.error_username_exists));
             focusView = mUsernameView;
             cancel = true;
         }
@@ -120,6 +154,7 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
 
+//<<<<<<< Updated upstream
     private void createUser(String email, String username,  String password, UserType userType) {
         User user = new User(username, email, password, userType);
         user.register(RegistrationActivity.this, new Intent(RegistrationActivity.this, MainActivity.class));
