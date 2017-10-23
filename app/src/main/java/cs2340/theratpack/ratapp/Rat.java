@@ -131,4 +131,6 @@ public class Rat {
         return longitude;
     }
 
+    public String toString() { return uniqueKey; }
+
 }
