@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
-    private RatModel ratModel = RatModel.INSTANCE;
+    public static RatModel ratModel = RatModel.INSTANCE;
 
     /**
      * UI Stuff
@@ -63,6 +63,14 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
                 ratModel.deleteAll();
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            }
+        });
+        Button addRat = (Button) findViewById(R.id.add_button);
+        addRat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "i work");
+                startActivity(new Intent(MainActivity.this, AddRatActivity.class));
             }
         });
         mAuth = FirebaseAuth.getInstance();

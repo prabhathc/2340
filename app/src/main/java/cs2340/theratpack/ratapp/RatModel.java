@@ -21,6 +21,8 @@ public class RatModel {
 
     public void add(Rat rat) { rats.add(rat); }
 
+    public  void add(int x,Rat rat) {rats.add(x, rat);}
+
     public void deleteAll() { rats = new ArrayList<>(); }
 
     public List<Rat> getRats() { return rats; }

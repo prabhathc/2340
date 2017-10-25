@@ -18,4 +18,8 @@
         completions."
     </string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="time_of_day">Time of Day</string>
+    <string name="city_android_inputtype">City</string>
+    <string name="number">Number</string>
+    <string name="address">Address</string>
 </resources>
