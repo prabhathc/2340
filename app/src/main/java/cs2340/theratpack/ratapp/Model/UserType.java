@@ -1,7 +1,7 @@
-package cs2340.theratpack.ratapp;
+package cs2340.theratpack.ratapp.Model;
 
 /**
- * Created by jpade on 9/30/2017.
+ * Created by Jamal Paden on 9/30/2017.
  */
 
 public enum UserType {

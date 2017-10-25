@@ -1,4 +1,4 @@
-package cs2340.theratpack.ratapp;
+package cs2340.theratpack.ratapp.Model;
 
 import android.content.Context;
 import android.content.Intent;
@@ -143,7 +143,9 @@ public class User {
         });
     }
 
-    //this is still a work in progress lol
+    /**
+     * Method to setup Read listeners
+     */
     private void setupReadListeners() {
         DatabaseReference user = mDatabase.child("users").child(uid);
         user.child("username").addListenerForSingleValueEvent(new ValueEventListener() {

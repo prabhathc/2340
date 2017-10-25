@@ -1,7 +1,6 @@
-package cs2340.theratpack.ratapp;
+package cs2340.theratpack.ratapp.Model;
 import com.google.firebase.database.DataSnapshot;
 
-import java.*;
 
 /**
  * Created by prabhath on 10/11/2017.
