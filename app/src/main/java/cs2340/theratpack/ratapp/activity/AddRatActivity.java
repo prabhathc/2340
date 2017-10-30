@@ -62,7 +62,7 @@ public class AddRatActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(AddRatActivity.this, MainActivity.class));
+                startActivity(new Intent(AddRatActivity.this, MapActivity.class));
             }
         });
 

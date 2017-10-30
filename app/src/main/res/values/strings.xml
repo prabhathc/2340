@@ -22,4 +22,5 @@
     <string name="city_android_inputtype">City</string>
     <string name="number">Number</string>
     <string name="address">Address</string>
+    <string name="title_activity_map">Map</string>
 </resources>
