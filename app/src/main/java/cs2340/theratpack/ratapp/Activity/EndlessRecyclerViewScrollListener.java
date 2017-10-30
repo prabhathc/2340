@@ -1,4 +1,4 @@
-package cs2340.theratpack.ratapp.Activity;
+package cs2340.theratpack.ratapp.activity;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;

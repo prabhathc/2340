@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="cs2340.theratpack.ratapp.MainActivity">
+    tools:context="cs2340.theratpack.ratapp.activity.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -43,7 +43,7 @@
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="cs2340.theratpack.ratapp.MainActivity"
+        tools:context="cs2340.theratpack.ratapp.Activity.MainActivity"
         tools:showIn="@layout/activity_main"
         tools:listitem="@layout/ratlist_content">
 

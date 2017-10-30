@@ -1,4 +1,4 @@
-package cs2340.theratpack.ratapp;
+package cs2340.theratpack.ratapp.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -27,6 +27,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import cs2340.theratpack.ratapp.model.User;
+import cs2340.theratpack.ratapp.model.UserType;
+import cs2340.theratpack.ratapp.R;
 
 
 public class RegistrationActivity extends AppCompatActivity {

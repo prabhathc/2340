@@ -1,4 +1,4 @@
-package cs2340.theratpack.ratapp;
+package cs2340.theratpack.ratapp.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import cs2340.theratpack.ratapp.model.Rat;
+import cs2340.theratpack.ratapp.model.RatModel;
+import cs2340.theratpack.ratapp.model.User;
+import cs2340.theratpack.ratapp.activity.*;
+import cs2340.theratpack.ratapp.R;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -65,6 +70,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
+
+        Button add_rat = (Button) findViewById(R.id.add_button);
+        add_rat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, AddRatActivity.class));
+            }
+        });
+
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -187,6 +201,8 @@ public class MainActivity extends AppCompatActivity {
                 mContentView = (TextView) view.findViewById(R.id.content);
             }
         }
+
+        public RatModel getModel() { return ratModel; }
     }
 
 }

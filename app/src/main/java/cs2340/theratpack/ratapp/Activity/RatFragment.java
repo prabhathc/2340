@@ -1,4 +1,4 @@
-package cs2340.theratpack.ratapp;
+package cs2340.theratpack.ratapp.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,6 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import cs2340.theratpack.ratapp.model.Rat;
+import cs2340.theratpack.ratapp.model.RatModel;
+import cs2340.theratpack.ratapp.R;
 
 //import android.app.Fragment;
 

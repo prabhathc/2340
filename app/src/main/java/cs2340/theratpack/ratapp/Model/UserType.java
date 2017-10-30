@@ -1,4 +1,4 @@
-package cs2340.theratpack.ratapp.Model;
+package cs2340.theratpack.ratapp.model;
 
 /**
  * Created by Jamal Paden on 9/30/2017.

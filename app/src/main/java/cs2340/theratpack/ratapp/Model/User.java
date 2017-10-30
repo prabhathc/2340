@@ -1,4 +1,4 @@
-package cs2340.theratpack.ratapp.Model;
+package cs2340.theratpack.ratapp.model;
 
 import android.content.Context;
 import android.content.Intent;

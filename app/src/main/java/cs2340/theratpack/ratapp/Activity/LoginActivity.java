@@ -1,4 +1,4 @@
-package cs2340.theratpack.ratapp;
+package cs2340.theratpack.ratapp.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -40,6 +40,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cs2340.theratpack.ratapp.model.User;
+import cs2340.theratpack.ratapp.R;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
