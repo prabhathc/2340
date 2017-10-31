@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Date;
+
 import cs2340.theratpack.ratapp.model.Rat;
 import cs2340.theratpack.ratapp.model.RatModel;
 import cs2340.theratpack.ratapp.R;
@@ -71,7 +73,7 @@ public class RatFragment extends Fragment {
             Log.d(TAG, "About to set key");
             ((TextView) rootView.findViewById(R.id.id2)).setText("" + ratSighting.getUniqueKey());
             Log.d(TAG, "Getting ready to set Created Date");
-            ((TextView) rootView.findViewById(R.id.createdDate)).setText(ratSighting.getCreatedDate());
+            ((TextView) rootView.findViewById(R.id.createdDate)).setText(new Date(ratSighting.getCreatedDate()).toString());
 
             ((TextView) rootView.findViewById(R.id.location_type)).setText(ratSighting.getLocationType());
             ((TextView) rootView.findViewById(R.id.zip)).setText(ratSighting.getIncidentZip());

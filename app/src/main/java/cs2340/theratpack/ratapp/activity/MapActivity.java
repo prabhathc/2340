@@ -21,6 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Date;
+
 import cs2340.theratpack.ratapp.R;
 import cs2340.theratpack.ratapp.model.Rat;
 import cs2340.theratpack.ratapp.model.RatModel;
@@ -31,6 +33,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
     private RatModel ratModel = RatModel.INSTANCE;
+    private boolean ratsLoaded = false;
 
 
     private GoogleMap mMap;
@@ -42,6 +45,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
         mapFragment.getMapAsync(this);
 
         mAuth = FirebaseAuth.getInstance();
@@ -71,7 +75,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 startActivity(new Intent(MapActivity.this, AddRatActivity.class));
             }
         });
-        ratsInRange("1441324800000", "1441324800000");
+        long startDate = 1441324800000L;
+        ratsInRange(1441324800000L, 1441324800000L);
         //currently just outputs to android monitor how many rats are loaded in this hard coded range
     }
 
@@ -87,17 +92,35 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Log.d(TAG, "Base map loaded");
         mMap = googleMap;
+        Button testButton = (Button) findViewById(R.id.test_button);
+        //for the time being its just going to stupidly reload all rats even if there is range overlap
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Test clicked");
+                ratModel.deleteAll();
+                ratsInRange(1441324800000L, 1441324800000L);
+                while(!ratsLoaded) {
+                    //basically hold until all rats are loaded
+                }
+                ratsLoaded = false;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+                for (Rat rat : ratModel.getRats()) {
+                    LatLng loc = new LatLng(rat.getLatitude(),rat.getLongitude());
+                    String title = (new Date(rat.getCreatedDate()).toString());
+                    mMap.addMarker(new MarkerOptions().position(loc).title(title));
+                }
+            }
+        });
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.0, -73.0), 7));
     }
 
-    private void ratsInRange(String startTime, String endTime) {
-        mDatabase.child("rat sightings").orderByChild("Created Date").startAt(startTime)
-                .endAt(endTime).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void ratsInRange(long startTime, long endTime) {
+        mDatabase.child("rat sightings").orderByChild("Created Date").startAt(String.valueOf(startTime))
+                .endAt(String.valueOf(endTime)).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Iterable<DataSnapshot> ratSnaps = dataSnapshot.getChildren();
@@ -109,6 +132,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                             ratModel.add(new Rat(ratSnap));
                         }
 
+                        ratsLoaded = true;
                         Log.d(TAG, String.valueOf(dataSnapshot.getChildrenCount()) + " rats loaded");
                     }
 

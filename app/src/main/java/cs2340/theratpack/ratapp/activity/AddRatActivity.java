@@ -32,7 +32,7 @@ public class AddRatActivity extends AppCompatActivity {
     private String uniqueKey = "" + (int) Math.floor(Math.random()*100);
     private double latitude = 40.730610;
     private double longitude = 	-73.935242;
-    private String createdDate = "" + Calendar.DATE;
+    private long createdDate = (new Date()).getTime();
     public static RatModel ratModel = RatModel.INSTANCE;
 
 

@@ -9,7 +9,7 @@ import com.google.firebase.database.DataSnapshot;
 public class Rat {
     private static final String TAG = "Rat";
     private String uniqueKey;
-    private String createdDate;
+    private long createdDate;
     private String locationType;
     private String incidentZip;
     private String incidentAddress;
@@ -24,7 +24,7 @@ public class Rat {
      * @param ratData this is the object from firebase if youre pulling rat data down
      */
     public Rat(DataSnapshot ratData) {
-        this(ratData.getKey(), (String)ratData.child("Created Date").getValue(),
+        this(ratData.getKey(), Long.parseLong((String)ratData.child("Created Date").getValue()),
                 (String)ratData.child("Location Type").getValue(), (String)ratData.child("Incident Zip").getValue(),
                 (String)ratData.child("Incident Address").getValue(), (String)ratData.child("City").getValue(),
                 (String)ratData.child("Borough").getValue(), Double.parseDouble((String)ratData.child("Longitude").getValue()),
@@ -44,7 +44,7 @@ public class Rat {
      * @param longitude
      * @param latitude
      */
-    public Rat(String uniqueKey, String createdDate, String locationType, String incidentZip,
+    public Rat(String uniqueKey, long createdDate, String locationType, String incidentZip,
                String incidentAddress, String city, String borough, double longitude,
                double latitude) {
         this.uniqueKey = uniqueKey;
@@ -62,7 +62,7 @@ public class Rat {
         uniqueKey = newKey;
     }
 
-    public void setCreatedDate(String newDate) {
+    public void setCreatedDate(Long newDate) {
         createdDate = newDate;
     }
 
@@ -98,7 +98,7 @@ public class Rat {
         return uniqueKey;
     }
 
-    public String getCreatedDate() {
+    public long getCreatedDate() {
         return createdDate;
     }
 
