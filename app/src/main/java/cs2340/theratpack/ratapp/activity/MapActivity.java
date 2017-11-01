@@ -116,19 +116,23 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.0, -73.0), 7));
     }
-    @Override
-    public void onResume() {
-        super.onResume();
-        DatePickerDialog dpd = (DatePickerDialog) getFragmentManager().findFragmentByTag("Datepickerdialog");
-        if(dpd != null) dpd.setOnDateSetListener(this);
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        DatePickerDialog dpd = (DatePickerDialog) getFragmentManager().findFragmentByTag("Datepickerdialog");
+//        if(dpd != null) dpd.setOnDateSetListener(this);
+//    }
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
-        Date startDate = new Date(year, monthOfYear, dayOfMonth);
-        Date endDate = new Date(yearEnd, monthOfYearEnd, dayOfMonthEnd);
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(year, monthOfYear, dayOfMonth);
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(yearEnd, monthOfYearEnd, dayOfMonthEnd);
         ratModel.deleteAll();
-        ratsInRange((startDate.getTime()),(endDate.getTime()));
-        Log.d(TAG, "" +startDate.getTime());
+        if (startDate != null && endDate != null) {
+            ratsInRange(startDate.getTimeInMillis(),endDate.getTimeInMillis());
+        }
+        Log.d(TAG, "" +startDate.getTimeInMillis());
 
     }
     private void ratsInRange(long startTime, long endTime) {
@@ -142,11 +146,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                         //load all the rats in as they currently are, then execute a separate "pin adding"
                         //idk tho im dumb
                         for (DataSnapshot ratSnap : ratSnaps) {
-                            Rat newRat = new Rat(ratSnap);
-                            ratModel.add(newRat);
-                            LatLng loc = new LatLng(newRat.getLatitude(),newRat.getLongitude());
-                            String title = ("ID: " + newRat.getUniqueKey());
-                            mMap.addMarker(new MarkerOptions().position(loc).title(title));
+                            if ((String)ratSnap.child("Longitude").getValue() != null && ((String)ratSnap.child("Longitude").getValue()).length() > 0) {
+                                Rat newRat = new Rat(ratSnap);
+                                ratModel.add(newRat);
+                                LatLng loc = new LatLng(newRat.getLatitude(), newRat.getLongitude());
+                                String title = ("ID: " + newRat.getUniqueKey());
+                                mMap.addMarker(new MarkerOptions().position(loc).title(title));
+                            }
                         }
                         Log.d(TAG, String.valueOf(dataSnapshot.getChildrenCount()) + " rats loaded");
                     }
