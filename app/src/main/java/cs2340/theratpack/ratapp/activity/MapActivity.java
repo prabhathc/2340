@@ -1,6 +1,7 @@
 package cs2340.theratpack.ratapp.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -33,7 +34,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
     private RatModel ratModel = RatModel.INSTANCE;
-    private boolean ratsLoaded = false;
 
 
     private GoogleMap mMap;
@@ -75,9 +75,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 startActivity(new Intent(MapActivity.this, AddRatActivity.class));
             }
         });
-        long startDate = 1441324800000L;
-        ratsInRange(1441324800000L, 1441324800000L);
-        //currently just outputs to android monitor how many rats are loaded in this hard coded range
     }
 
 
@@ -102,22 +99,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 Log.d(TAG, "Test clicked");
                 ratModel.deleteAll();
                 ratsInRange(1441324800000L, 1441324800000L);
-                while(!ratsLoaded) {
-                    //basically hold until all rats are loaded
-                }
-                ratsLoaded = false;
-
-                for (Rat rat : ratModel.getRats()) {
-                    LatLng loc = new LatLng(rat.getLatitude(),rat.getLongitude());
-                    String title = (new Date(rat.getCreatedDate()).toString());
-                    mMap.addMarker(new MarkerOptions().position(loc).title(title));
-                }
             }
         });
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.0, -73.0), 7));
     }
-
     private void ratsInRange(long startTime, long endTime) {
         mDatabase.child("rat sightings").orderByChild("Created Date").startAt(String.valueOf(startTime))
                 .endAt(String.valueOf(endTime)).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -129,10 +115,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                         //load all the rats in as they currently are, then execute a separate "pin adding"
                         //idk tho im dumb
                         for (DataSnapshot ratSnap : ratSnaps) {
-                            ratModel.add(new Rat(ratSnap));
+                            Rat newRat = new Rat(ratSnap);
+                            ratModel.add(newRat);
+                            LatLng loc = new LatLng(newRat.getLatitude(),newRat.getLongitude());
+                            String title = ("ID: " + newRat.getUniqueKey());
+                            mMap.addMarker(new MarkerOptions().position(loc).title(title));
                         }
-
-                        ratsLoaded = true;
                         Log.d(TAG, String.valueOf(dataSnapshot.getChildrenCount()) + " rats loaded");
                     }
 
