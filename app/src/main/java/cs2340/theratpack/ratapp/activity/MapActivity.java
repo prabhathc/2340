@@ -1,5 +1,6 @@
 package cs2340.theratpack.ratapp.activity;
 
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,18 +24,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import cs2340.theratpack.ratapp.R;
 import cs2340.theratpack.ratapp.model.Rat;
 import cs2340.theratpack.ratapp.model.RatModel;
 
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapActivity extends FragmentActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener {
     private static final String TAG = "MapActivity";
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
     private RatModel ratModel = RatModel.INSTANCE;
+
 
 
     private GoogleMap mMap;
@@ -87,6 +91,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+
+
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "Base map loaded");
@@ -96,13 +103,33 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Test clicked");
-                ratModel.deleteAll();
-                ratsInRange(1441324800000L, 1441324800000L);
+                Calendar now = Calendar.getInstance();
+                DatePickerDialog dpd = DatePickerDialog.newInstance(
+                        MapActivity.this,
+                        now.get(Calendar.YEAR),
+                        now.get(Calendar.MONTH),
+                        now.get(Calendar.DAY_OF_MONTH)
+                );
+                dpd.show(getFragmentManager(), "Datepickerdialog");
             }
         });
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.0, -73.0), 7));
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        DatePickerDialog dpd = (DatePickerDialog) getFragmentManager().findFragmentByTag("Datepickerdialog");
+        if(dpd != null) dpd.setOnDateSetListener(this);
+    }
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+        Date startDate = new Date(year, monthOfYear, dayOfMonth);
+        Date endDate = new Date(yearEnd, monthOfYearEnd, dayOfMonthEnd);
+        ratModel.deleteAll();
+        ratsInRange((startDate.getTime()),(endDate.getTime()));
+        Log.d(TAG, "" +startDate.getTime());
+
     }
     private void ratsInRange(long startTime, long endTime) {
         mDatabase.child("rat sightings").orderByChild("Created Date").startAt(String.valueOf(startTime))
@@ -130,4 +157,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                     }
                 });
     }
+
 }
+
+
