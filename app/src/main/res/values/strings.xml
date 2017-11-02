@@ -23,4 +23,9 @@
     <string name="number">Number</string>
     <string name="address">Address</string>
     <string name="title_activity_map">Map</string>
+    <string-array name="displays">
+        <item>Map</item>
+        <item>Histogram</item>
+    </string-array>
+    <string name="display_title">Displays</string>
 </resources>
