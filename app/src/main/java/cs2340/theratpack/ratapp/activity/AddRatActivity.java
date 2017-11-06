@@ -62,7 +62,7 @@ public class AddRatActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(AddRatActivity.this, MapActivity.class));
+                startActivity(new Intent(AddRatActivity.this, Main2Activity.class));
             }
         });
 
@@ -144,7 +144,7 @@ public class AddRatActivity extends AppCompatActivity {
         Rat rat = new Rat(uniqueKey,createdDate,locationType,incidentZip,incidentAddress,city,borough,longitude,latitude);
 
         ratModel.add(rat);
-        startActivity(new Intent(AddRatActivity.this, MainActivity.class));
+        startActivity(new Intent(AddRatActivity.this, Main2Activity.class));
     }
 
 

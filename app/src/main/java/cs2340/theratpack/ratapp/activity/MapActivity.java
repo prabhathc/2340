@@ -1,35 +1,33 @@
 package cs2340.theratpack.ratapp.activity;
-
-
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import com.borax12.materialdaterangepicker.date.DatePickerDialog;
+        import android.os.AsyncTask;
+        import android.support.annotation.NonNull;
+        import android.support.v4.app.FragmentActivity;
+        import android.os.Bundle;
+        import android.util.Log;
+        import android.view.View;
+        import android.widget.Button;
+        import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+        import com.google.android.gms.maps.CameraUpdateFactory;
+        import com.google.android.gms.maps.GoogleMap;
+        import com.google.android.gms.maps.OnMapReadyCallback;
+        import com.google.android.gms.maps.SupportMapFragment;
+        import com.google.android.gms.maps.model.LatLng;
+        import com.google.android.gms.maps.model.MarkerOptions;
+        import com.google.firebase.auth.FirebaseAuth;
+        import com.google.firebase.database.DataSnapshot;
+        import com.google.firebase.database.DatabaseError;
+        import com.google.firebase.database.DatabaseReference;
+        import com.google.firebase.database.FirebaseDatabase;
+        import com.google.firebase.database.ValueEventListener;
 
-import java.util.Calendar;
-import java.util.Date;
+        import java.util.Calendar;
+        import java.util.Date;
 
-import cs2340.theratpack.ratapp.R;
-import cs2340.theratpack.ratapp.model.Rat;
-import cs2340.theratpack.ratapp.model.RatModel;
+        import cs2340.theratpack.ratapp.R;
+        import cs2340.theratpack.ratapp.model.Rat;
+        import cs2340.theratpack.ratapp.model.RatModel;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener {
     private static final String TAG = "MapActivity";
@@ -116,7 +114,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.0, -73.0), 7));
     }
-//    @Override
+    //    @Override
 //    public void onResume() {
 //        super.onResume();
 //        DatePickerDialog dpd = (DatePickerDialog) getFragmentManager().findFragmentByTag("Datepickerdialog");
@@ -138,32 +136,31 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private void ratsInRange(long startTime, long endTime) {
         mDatabase.child("rat sightings").orderByChild("Created Date").startAt(String.valueOf(startTime))
                 .endAt(String.valueOf(endTime)).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Iterable<DataSnapshot> ratSnaps = dataSnapshot.getChildren();
-                        //I see two options:
-                        //load pins into the map in the for-loop (idk if thats possible due to async processes
-                        //load all the rats in as they currently are, then execute a separate "pin adding"
-                        //idk tho im dumb
-                        for (DataSnapshot ratSnap : ratSnaps) {
-                            if ((String)ratSnap.child("Longitude").getValue() != null && ((String)ratSnap.child("Longitude").getValue()).length() > 0) {
-                                Rat newRat = new Rat(ratSnap);
-                                ratModel.add(newRat);
-                                LatLng loc = new LatLng(newRat.getLatitude(), newRat.getLongitude());
-                                String title = ("ID: " + newRat.getUniqueKey());
-                                mMap.addMarker(new MarkerOptions().position(loc).title(title));
-                            }
-                        }
-                        Log.d(TAG, String.valueOf(dataSnapshot.getChildrenCount()) + " rats loaded");
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> ratSnaps = dataSnapshot.getChildren();
+                //I see two options:
+                //load pins into the map in the for-loop (idk if thats possible due to async processes
+                //load all the rats in as they currently are, then execute a separate "pin adding"
+                //idk tho im dumb
+                for (DataSnapshot ratSnap : ratSnaps) {
+                    if ((String)ratSnap.child("Longitude").getValue() != null && ((String)ratSnap.child("Longitude").getValue()).length() > 0) {
+                        Rat newRat = new Rat(ratSnap);
+                        ratModel.add(newRat);
+                        LatLng loc = new LatLng(newRat.getLatitude(), newRat.getLongitude());
+                        String title = ("ID: " + newRat.getUniqueKey());
+                        mMap.addMarker(new MarkerOptions().position(loc).title(title));
                     }
+                }
+                Log.d(TAG, String.valueOf(dataSnapshot.getChildrenCount()) + " rats loaded");
+            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
+            }
+        });
     }
 
 }
-
 
