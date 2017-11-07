@@ -224,6 +224,8 @@ public class GraphActivity extends AppCompatActivity
                     };
                     XAxis xAxis = chart.getXAxis();
                     xAxis.setGranularity(1f);
+                    xAxis.setLabelCount(labels.size());
+
                     xAxis.setValueFormatter(formatter);
                     BarDataSet dataSet = new BarDataSet(entries, "Rat Count");
                     if (barData != null) {
@@ -232,9 +234,11 @@ public class GraphActivity extends AppCompatActivity
                         chart.notifyDataSetChanged();
                     } else {
                         BarData barData = new BarData(dataSet);
+                        chart.setPinchZoom(false);
+                        chart.setDrawGridBackground(false);
+                        chart.setFitBars(true);
                         chart.setData(barData);
                     }
-                    chart.setFitBars(true);
                     chart.invalidate();
                 }
             }
