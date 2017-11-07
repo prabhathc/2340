@@ -1,27 +1,17 @@
 package cs2340.theratpack.ratapp.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
-import android.webkit.GeolocationPermissions;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.Calendar;
 import java.util.Date;
 
 import cs2340.theratpack.ratapp.R;
-import cs2340.theratpack.ratapp.activity.MainActivity;
 import cs2340.theratpack.ratapp.model.Rat;
 import cs2340.theratpack.ratapp.model.RatModel;
 
@@ -62,7 +52,7 @@ public class AddRatActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(AddRatActivity.this, Main2Activity.class));
+                startActivity(new Intent(AddRatActivity.this, MapActivity.class));
             }
         });
 
@@ -144,7 +134,7 @@ public class AddRatActivity extends AppCompatActivity {
         Rat rat = new Rat(uniqueKey,createdDate,locationType,incidentZip,incidentAddress,city,borough,longitude,latitude);
 
         ratModel.add(rat);
-        startActivity(new Intent(AddRatActivity.this, Main2Activity.class));
+        startActivity(new Intent(AddRatActivity.this, MapActivity.class));
     }
 
 

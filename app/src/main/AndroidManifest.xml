@@ -25,10 +25,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.RegistrationActivity" />
         <activity
             android:name=".activity.AddRatActivity"
@@ -47,11 +43,12 @@
 
         <activity
             android:name=".activity.MapActivity"
-            android:label="@string/title_activity_map" />
-        <activity
-            android:name=".activity.Main2Activity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.GraphActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label=""
+            ></activity>
     </application>
 
 </manifest>

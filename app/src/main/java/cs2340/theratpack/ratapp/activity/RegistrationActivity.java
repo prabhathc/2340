@@ -1,25 +1,13 @@
 package cs2340.theratpack.ratapp.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.view.View.OnClickListener;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.firebase.database.DataSnapshot;
@@ -161,6 +149,6 @@ public class RegistrationActivity extends AppCompatActivity {
 //<<<<<<< Updated upstream
     private void createUser(String email, String username,  String password, UserType userType) {
         User user = new User(username, email, password, userType);
-        user.register(RegistrationActivity.this, new Intent(RegistrationActivity.this, MainActivity.class));
+        user.register(RegistrationActivity.this, new Intent(RegistrationActivity.this, MapActivity.class));
     }
 }
