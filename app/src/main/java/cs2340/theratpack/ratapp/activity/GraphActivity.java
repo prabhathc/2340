@@ -139,6 +139,16 @@ public class GraphActivity extends AppCompatActivity
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+        //call rats in range on a per month+year basis
+        //make sure to account for irregularly selected number of days on the tail months, if less that 1 or 2 months
+        for (int yr = year; yr <= yearEnd; yr++) {
+            for (int month = monthOfYear; month <= monthOfYearEnd; month++) {
+                //account for first and last months
+                //if yr==year and month==monthofyear check day
+                //if yr==yearend and month==monthofyrend check day
+                //if the above are true and year==year end and month==monthend, only look at start/end days
+            }
+        }
         Calendar startDate = Calendar.getInstance();
         startDate.set(year, monthOfYear, dayOfMonth);
         Calendar endDate = Calendar.getInstance();
