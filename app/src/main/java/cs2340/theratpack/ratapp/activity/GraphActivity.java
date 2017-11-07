@@ -1,6 +1,7 @@
 package cs2340.theratpack.ratapp.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +17,15 @@ import android.widget.Button;
 
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -24,7 +34,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import cs2340.theratpack.ratapp.R;
 import cs2340.theratpack.ratapp.model.Rat;
@@ -33,27 +45,28 @@ import cs2340.theratpack.ratapp.model.RatModel;
 public class GraphActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DatePickerDialog.OnDateSetListener{
 
-    private static final String TAG = "Activity2";
+    private static final String TAG = "GraphActivity";
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
-    private RatModel ratModel = RatModel.INSTANCE;
     private BarChart chart;
+    private List<BarEntry> entries;
+    private BarData barData = null;
+    private List<String> labels;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_graph);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -141,40 +154,89 @@ public class GraphActivity extends AppCompatActivity
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
         //call rats in range on a per month+year basis
         //make sure to account for irregularly selected number of days on the tail months, if less that 1 or 2 months
-        for (int yr = year; yr <= yearEnd; yr++) {
-            for (int month = monthOfYear; month <= monthOfYearEnd; month++) {
-                //account for first and last months
-                //if yr==year and month==monthofyear check day
-                //if yr==yearend and month==monthofyrend check day
-                //if the above are true and year==year end and month==monthend, only look at start/end days
+        entries = new ArrayList<BarEntry>();
+        labels = new ArrayList<>();
+        if (year == yearEnd && monthOfYear == monthOfYearEnd) {
+            Calendar startDate = Calendar.getInstance();
+            startDate.set(year, monthOfYear, dayOfMonth);
+            Calendar endDate = Calendar.getInstance();
+            endDate.set(yearEnd, monthOfYearEnd, dayOfMonthEnd);
+            ratsInRange(startDate.getTimeInMillis(),endDate.getTimeInMillis(), 0, true);
+            labels.add(String.valueOf(monthOfYear) + "-" + String.valueOf(year));
+        } else {
+            int position = 0;
+            for (int yr = year; yr <= yearEnd; yr++) {
+                for (int month = monthOfYear; month <= monthOfYearEnd; month++) {
+                    boolean last = false;
+                    Calendar startDate = Calendar.getInstance();
+                    startDate.set(Calendar.YEAR, yr);
+                    startDate.set(Calendar.MONTH, month);
+                    if (month == monthOfYear && yr == year) {
+                        startDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    } else {
+                        startDate.set(Calendar.DAY_OF_MONTH, 1);
+
+                    }
+
+                    Calendar endDate = Calendar.getInstance();
+                    endDate.set(Calendar.YEAR, yr);
+                    endDate.set(Calendar.MONTH, month);
+                    if (month == monthOfYearEnd && yr == yearEnd) {
+                        endDate.set(Calendar.DAY_OF_MONTH, dayOfMonthEnd);
+                        last = true;
+                    } else {
+                        endDate.set(Calendar.DAY_OF_MONTH, endDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+                    }
+                    Log.d(TAG, String.valueOf(position) + ": " + String.valueOf(month) + "-"
+                            + String.valueOf(yr) + " " + startDate.getTime() + " " + endDate.getTime());
+                    labels.add(String.valueOf(month) + "-" + String.valueOf(yr));
+                    ratsInRange(startDate.getTimeInMillis(),endDate.getTimeInMillis(), position, last);
+                    position++;
+
+
+                    //account for first and last months
+                    //if yr==year and month==monthofyear check day
+                    //if yr==yearend and month==monthofyrend check day
+                    //if the above are true and year==year end and month==monthend, only look at start/end days
+                }
             }
         }
-        Calendar startDate = Calendar.getInstance();
-        startDate.set(year, monthOfYear, dayOfMonth);
-        Calendar endDate = Calendar.getInstance();
-        endDate.set(yearEnd, monthOfYearEnd, dayOfMonthEnd);
-        ratModel.deleteAll();
-        if (startDate != null && endDate != null) {
-            ratsInRange(startDate.getTimeInMillis(),endDate.getTimeInMillis());
-        }
-        Log.d(TAG, "" +startDate.getTimeInMillis());
-
     }
-    private void ratsInRange(long startTime, long endTime) {
+
+    private void ratsInRange(long startTime, long endTime, final int monthYear, final boolean last) {
         mDatabase.child("rat sightings").orderByChild("Created Date").startAt(String.valueOf(startTime))
                 .endAt(String.valueOf(endTime)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> ratSnaps = dataSnapshot.getChildren();
+                long count = dataSnapshot.getChildrenCount();
 
-                for (DataSnapshot ratSnap : ratSnaps) {
-                    if ((String)ratSnap.child("Longitude").getValue() != null && ((String)ratSnap.child("Longitude").getValue()).length() > 0) {
-                        Rat newRat = new Rat(ratSnap);
-                        ratModel.add(newRat);
-                        String title = ("ID: " + newRat.getUniqueKey());
+                entries.add(new BarEntry(monthYear, count));
+
+                Log.d(TAG, String.valueOf(count) + " rats loaded");
+                if (last) {
+                    IAxisValueFormatter formatter = new IAxisValueFormatter() {
+                        @Override
+                        public String getFormattedValue(float value, AxisBase axis) {
+                            return labels.get((int)value);
+                        }
+                    };
+                    XAxis xAxis = chart.getXAxis();
+                    xAxis.setGranularity(1f);
+                    xAxis.setValueFormatter(formatter);
+                    BarDataSet dataSet = new BarDataSet(entries, "Rat Count");
+                    if (barData != null) {
+                        barData.removeDataSet(0);
+                        barData.addDataSet(dataSet);
+                        chart.notifyDataSetChanged();
+                    } else {
+                        BarData barData = new BarData(dataSet);
+                        chart.setData(barData);
                     }
+                    chart.setFitBars(true);
+                    chart.invalidate();
                 }
-                Log.d(TAG, String.valueOf(dataSnapshot.getChildrenCount()) + " rats loaded");
             }
 
             @Override
