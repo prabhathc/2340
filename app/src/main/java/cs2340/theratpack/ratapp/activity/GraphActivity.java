@@ -19,6 +19,7 @@ import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -226,6 +227,8 @@ public class GraphActivity extends AppCompatActivity
                     xAxis.setGranularity(1f);
                     xAxis.setLabelCount(labels.size());
 
+
+
                     xAxis.setValueFormatter(formatter);
                     BarDataSet dataSet = new BarDataSet(entries, "Rat Count");
                     if (barData != null) {
@@ -234,7 +237,7 @@ public class GraphActivity extends AppCompatActivity
                         chart.notifyDataSetChanged();
                     } else {
                         BarData barData = new BarData(dataSet);
-                        chart.setPinchZoom(false);
+                        chart.setPinchZoom(true);
                         chart.setDrawGridBackground(false);
                         chart.setFitBars(true);
                         chart.setData(barData);

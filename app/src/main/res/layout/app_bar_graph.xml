@@ -21,24 +21,25 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <Button
             android:id="@+id/test_button"
-            android:text="Test Range"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="false"
+            android:text="Test Range" />
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/chart"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="228pt"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true" />
         <!--PUT GRAPH STUFF HERE-->
 
     </RelativeLayout>
