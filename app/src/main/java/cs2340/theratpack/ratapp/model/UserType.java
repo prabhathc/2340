@@ -10,7 +10,7 @@ public enum UserType {
 
     private String value;
 
-    private UserType(String value) {
+    UserType(String value) {
         this.value = value;
     }
 

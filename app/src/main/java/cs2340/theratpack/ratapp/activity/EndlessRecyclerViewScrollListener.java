@@ -15,14 +15,14 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     private int visibleThreshold = 5;
     // The current offset index of data you have loaded
     private int currentPage = 0;
-    // The total number of items in the dataset after the last load
+    // The total number of items in the data set after the last load
     private int previousTotalItemCount = 0;
     // True if we are still waiting for the last set of data to load.
     private boolean loading = true;
     // Sets the starting page index
     private int startingPageIndex = 0;
 
-    RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     public EndlessRecyclerViewScrollListener(LinearLayoutManager layoutManager) {
         this.mLayoutManager = layoutManager;
@@ -38,7 +38,7 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
         visibleThreshold = visibleThreshold * layoutManager.getSpanCount();
     }
 
-    public int getLastVisibleItem(int[] lastVisibleItemPositions) {
+    private int getLastVisibleItem(int[] lastVisibleItemPositions) {
         int maxSize = 0;
         for (int i = 0; i < lastVisibleItemPositions.length; i++) {
             if (i == 0) {
@@ -78,7 +78,7 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
                 this.loading = true;
             }
         }
-        // If it’s still loading, we check to see if the dataset count has
+        // If it’s still loading, we check to see if the data set count has
         // changed, if so we conclude it has finished loading and update the current page
         // number and total item count.
         if (loading && (totalItemCount > previousTotalItemCount)) {

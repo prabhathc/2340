@@ -17,7 +17,6 @@ public class Rat {
     private String borough;
     private double latitude;
     private double longitude;
-    private DataSnapshot ratData;
 
     /**
      * Call this when you're pulling from firebase
@@ -29,20 +28,20 @@ public class Rat {
                 (String)ratData.child("Incident Address").getValue(), (String)ratData.child("City").getValue(),
                 (String)ratData.child("Borough").getValue(), Double.parseDouble((String)ratData.child("Longitude").getValue()),
                 Double.parseDouble((String)ratData.child("Latitude").getValue()));
-        this.ratData = ratData;
+        DataSnapshot ratData1 = ratData;
     }
 
     /**
      * Call this explicitly if you're creating a rat sighting. Follow it up with pushing to the database
      * @param uniqueKey key in firebase
      * @param createdDate date the sighting ocurred
-     * @param locationType
-     * @param incidentZip
-     * @param incidentAddress
-     * @param city
-     * @param borough
-     * @param longitude
-     * @param latitude
+     * @param locationType the kind of location the incident was at
+     * @param incidentZip zip code
+     * @param incidentAddress address of the incident
+     * @param city city of the incident
+     * @param borough borough of ...
+     * @param longitude longitude for Google Maps
+     * @param latitude latitute for Google Maps
      */
     public Rat(String uniqueKey, long createdDate, String locationType, String incidentZip,
                String incidentAddress, String city, String borough, double longitude,
