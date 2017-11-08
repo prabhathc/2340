@@ -2,10 +2,6 @@ package cs2340.theratpack.ratapp.model;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.app.Activity;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -15,7 +11,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,7 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Timestamp;
-import java.util.Iterator;
 
 /** Model for the user class
  * Created by Jamal Paden on 9/28/2017.
@@ -49,8 +43,8 @@ public class User {
 
     /**
      * Constructor for login. If explicitly using this one, always call login next
-     * @param email
-     * @param password
+     * @param email email address used ro register
+     * @param password password used to register
      */
     public User(String email, String password) {
         this.email = email;
@@ -97,7 +91,10 @@ public class User {
                         if (task.isSuccessful()) {
                             //fUser = mAuth.getCurrentUser();
                             lastLoginAttempt = new Timestamp(System.currentTimeMillis());
-                            uid = mAuth.getCurrentUser().getUid();
+                            if (mAuth.getCurrentUser() != null) {
+                                uid = mAuth.getCurrentUser().getUid();
+                            }
+
                             setupReadListeners();
                             mDatabase.child("users").child(uid).child("admin").setValue(isAdmin());
                             mDatabase.child("users").child(uid).child("last-attempt").setValue(lastLoginAttempt.toString());
@@ -130,7 +127,9 @@ public class User {
                 if (task.isSuccessful()) {
 
                     lastLoginAttempt = new Timestamp(System.currentTimeMillis());
-                    uid = mAuth.getCurrentUser().getUid();
+                    if (mAuth.getCurrentUser() != null) {
+                        uid = mAuth.getCurrentUser().getUid();
+                    }
                     setupReadListeners();
                     mDatabase.child("users").child(uid).child("last-attempt").setValue(lastLoginAttempt.toString());
                     Log.w(TAG, "login: success");

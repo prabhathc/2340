@@ -23,7 +23,7 @@ public class AddRatActivity extends AppCompatActivity {
     private double latitude = 40.730610;
     private double longitude = 	-73.935242;
     private long createdDate = (new Date()).getTime();
-    public static RatModel ratModel = RatModel.INSTANCE;
+    private static RatModel ratModel = RatModel.INSTANCE;
 
 
 
@@ -137,5 +137,8 @@ public class AddRatActivity extends AppCompatActivity {
         startActivity(new Intent(AddRatActivity.this, MapActivity.class));
     }
 
+    public RatModel getModel() {
+        return ratModel;
+    }
 
 }

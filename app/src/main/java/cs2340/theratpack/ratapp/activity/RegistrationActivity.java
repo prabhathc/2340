@@ -100,7 +100,7 @@ public class RegistrationActivity extends AppCompatActivity {
         boolean usernameExists = false;
 
         for(DataSnapshot fbUsername : usernames) {
-            if (username.equals((String)fbUsername.getKey())) {
+            if (username.equals(fbUsername.getKey())) {
                 usernameExists = true;
             }
         }

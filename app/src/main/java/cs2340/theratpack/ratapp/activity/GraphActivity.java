@@ -196,9 +196,9 @@ public class GraphActivity extends AppCompatActivity
 
 
                     //account for first and last months
-                    //if yr==year and month==monthofyear check day
-                    //if yr==yearend and month==monthofyrend check day
-                    //if the above are true and year==year end and month==monthend, only look at start/end days
+                    //if yr==year and month==month of year check day
+                    //if yr==year end and month==month of year rend check day
+                    //if the above are true and year==year end and month==month end, only look at start/end days
                 }
             }
         }
@@ -209,7 +209,7 @@ public class GraphActivity extends AppCompatActivity
                 .endAt(String.valueOf(endTime)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> ratSnaps = dataSnapshot.getChildren();
+                // Iterable<DataSnapshot> ratSnaps = dataSnapshot.getChildren();
                 long count = dataSnapshot.getChildrenCount();
 
                 entries.add(new BarEntry(monthYear, count));

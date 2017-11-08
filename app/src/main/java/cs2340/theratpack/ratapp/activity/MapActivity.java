@@ -159,9 +159,10 @@ public class MapActivity extends AppCompatActivity
         Calendar endDate = Calendar.getInstance();
         endDate.set(yearEnd, monthOfYearEnd, dayOfMonthEnd);
         ratModel.deleteAll();
-        if (startDate != null && endDate != null) {
+        /*if (startDate != null && endDate != null) {
             ratsInRange(startDate.getTimeInMillis(),endDate.getTimeInMillis());
-        }
+        }*/
+        ratsInRange(startDate.getTimeInMillis(),endDate.getTimeInMillis());
         Log.d(TAG, "" +startDate.getTimeInMillis());
 
     }
@@ -176,7 +177,7 @@ public class MapActivity extends AppCompatActivity
                 //load all the rats in as they currently are, then execute a separate "pin adding"
                 //idk tho im dumb
                 for (DataSnapshot ratSnap : ratSnaps) {
-                    if ((String)ratSnap.child("Longitude").getValue() != null && ((String)ratSnap.child("Longitude").getValue()).length() > 0) {
+                    if (ratSnap.child("Longitude").getValue() != null && ((String)ratSnap.child("Longitude").getValue()).length() > 0) {
                         Rat newRat = new Rat(ratSnap);
                         ratModel.add(newRat);
                         LatLng loc = new LatLng(newRat.getLatitude(), newRat.getLongitude());

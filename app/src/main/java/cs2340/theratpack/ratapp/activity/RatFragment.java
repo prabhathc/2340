@@ -16,19 +16,13 @@ import cs2340.theratpack.ratapp.model.Rat;
 import cs2340.theratpack.ratapp.model.RatModel;
 import cs2340.theratpack.ratapp.R;
 
-//import android.app.Fragment;
-
-
-/**
- * Created by Jamal Paden on 10/12/2017.
- */
 
 public class RatFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
-    public static final String ARG_ITEM_ID = "rat_key";
+    private static final String ARG_ITEM_ID = "rat_key";
 
     private static final String TAG = "RatFragment";
 
