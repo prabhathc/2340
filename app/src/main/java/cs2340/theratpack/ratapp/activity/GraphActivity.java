@@ -140,8 +140,7 @@ public class GraphActivity extends AppCompatActivity
         return true;
     }
 
-
-    @Override
+   @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
         //call rats in range on a per month+year basis
         //make sure to account for irregularly selected number of days on the tail months, if less that 1 or 2 months
