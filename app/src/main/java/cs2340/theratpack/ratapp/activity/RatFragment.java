@@ -36,6 +36,10 @@ public class RatFragment extends Fragment {
      */
     public RatFragment() {}
 
+    /**
+     *   Sets up the activity to create a rat fragment
+     * @param savedInstanceState the current instance you are on
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +60,13 @@ public class RatFragment extends Fragment {
         }
     }
 
+    /**
+     * Creating a view rat sighting in the method the user is currently in
+     * @param inflater the layout you are currently on
+     * @param container the current view you are
+     * @param savedInstance the instance the screen is currently on
+     * @return a view of that rat sighting
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
