@@ -29,7 +29,7 @@
 
         <Button
             android:id="@+id/test_button"
-            android:text="Test Range"
+            android:text="@string/testrange"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

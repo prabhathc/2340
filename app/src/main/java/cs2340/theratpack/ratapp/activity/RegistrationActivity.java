@@ -23,19 +23,19 @@ import cs2340.theratpack.ratapp.R;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-
-    private static final String TAG = "RegistrationActivity";
-    private DatabaseReference mDatabase;
+// --Commented out by Inspection START (11/10/2017 12:03 AM):
+//    /**
+//     * Keep track of the login task to ensure we can cancel it if requested.
+//     */
+//
+//    private static final String TAG = "RegistrationActivity";
+// --Commented out by Inspection STOP (11/10/2017 12:03 AM)
     private Iterable<DataSnapshot> usernames;
     private EditText mEmailView;
     private EditText mUsernameView;
     private EditText mPasswordView;
     private EditText mPasswordView2;
     private ToggleButton mAdminToggle;
-    private View mRegistrationFormView;
 
     @Override
     public void onStart() {
@@ -48,7 +48,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_registration);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mDatabase.child("usernames").addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -72,7 +72,7 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
-        mRegistrationFormView = findViewById(R.id.registration_form);
+        //View mRegistrationFormView = findViewById(R.id.registration_form);
         mEmailView = (EditText) findViewById(R.id.registration_email);
         mUsernameView = (EditText) findViewById(R.id.registration_username);
 

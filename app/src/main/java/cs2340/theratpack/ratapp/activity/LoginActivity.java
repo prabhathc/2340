@@ -49,10 +49,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    /**
-     * Tag for logging purposes
-     */
-    private static final String TAG = "LoginActivity";
+
+     // Tag for logging purposes
+
+    //private static final String TAG = "LoginActivity";
 
     /*
      * A dummy authentication store containing known user names and passwords.
@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-/*<<<<<<< Updated upstream
+/*---------Updated upstream
 
 =======
                 FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 } else {
                     Log.d(TAG, "onAuthStateChanged:logout");
                 }
->>>>>>> Stashed changes*/
+-------Stashed changes*/
             }
         };
 
@@ -331,7 +331,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         };
 
         int ADDRESS = 0;
-        int IS_PRIMARY = 1;
+        //int IS_PRIMARY = 1;
     }
 }
 

@@ -6,10 +6,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by rhiannan on 10/23/2017.
- */
-
 public class RatModel {
     private static final String TAG = "RatModel";
     public static final RatModel INSTANCE = new RatModel();
@@ -24,7 +20,7 @@ public class RatModel {
 
     public void deleteAll() { rats = new ArrayList<>(); }
 
-    public List<Rat> getRats() { return rats; }
+    // --Commented out by Inspection (11/10/2017 12:03 AM):public List<Rat> getRats() { return rats; }
 
     public Rat findRatById(String key) {
         for (Rat r: rats) {

@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">RatApp</string>
+    <string name="as">Android Studio</string>
+    <string name="email">androidstudio@android.com</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -17,6 +19,22 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!-- Registration Strings -->
+    <string name="retype">Retype Password</string>
+    <string name="user">User</string>
+    <string name="admin">Admin</string>
+
+
+    <!-- Strings for Add Rat Activity -->
+    <string name="back">Back</string>
+    <string name="zip">Zip</string>
+    <string name="location_type">Location Type</string>
+    <string name="borough">Borough</string>
+    <string name="upload">Upload</string>
+
+    <!-- Strings for Map and Graphs -->
+    <string name="graph">Graph</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="time_of_day">Time of Day</string>
     <string name="city_android_inputtype">City</string>
@@ -32,4 +50,5 @@
         <item>Histogram</item>
     </string-array>
     <string name="display_title">Displays</string>
+    <string name="testrange">Test Range</string>
 </resources>

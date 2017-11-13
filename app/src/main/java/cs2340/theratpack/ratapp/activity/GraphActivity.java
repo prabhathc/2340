@@ -1,7 +1,6 @@
 package cs2340.theratpack.ratapp.activity;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,15 +18,10 @@ import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.interfaces.datasets.IDataSet;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,15 +34,11 @@ import java.util.Calendar;
 import java.util.List;
 
 import cs2340.theratpack.ratapp.R;
-import cs2340.theratpack.ratapp.model.Rat;
-import cs2340.theratpack.ratapp.model.RatModel;
 
 public class GraphActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DatePickerDialog.OnDateSetListener{
 
     private static final String TAG = "GraphActivity";
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
     private BarChart chart;
     private List<BarEntry> entries;
@@ -71,8 +61,8 @@ public class GraphActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_graph);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 Log.d(TAG, "AuthState changed");
@@ -132,7 +122,7 @@ public class GraphActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -155,7 +145,7 @@ public class GraphActivity extends AppCompatActivity
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
         //call rats in range on a per month+year basis
         //make sure to account for irregularly selected number of days on the tail months, if less that 1 or 2 months
-        entries = new ArrayList<BarEntry>();
+        entries = new ArrayList<>();
         labels = new ArrayList<>();
         if (year == yearEnd && monthOfYear == monthOfYearEnd) {
             Calendar startDate = Calendar.getInstance();

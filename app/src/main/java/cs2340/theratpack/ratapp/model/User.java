@@ -10,7 +10,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+//import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,22 +19,16 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Timestamp;
 
-/** Model for the user class
- * Created by Jamal Paden on 9/28/2017.
- */
-
 public class User {
     private static final String TAG = "User";
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private DatabaseReference mDatabase;
-    private FirebaseUser fUser;
+    private final FirebaseAuth mAuth;
+    private final DatabaseReference mDatabase;
+    // --Commented out by Inspection (11/10/2017 12:03 AM):private FirebaseUser fUser;
 
     private String uid;
     private String username;
-    private String password;
-    private String email;
-    private int loginAttempts;
+    private final String password;
+    private final String email;
     private Timestamp lastLoginAttempt;
     private UserType type;
 
@@ -53,7 +47,7 @@ public class User {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
+        FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 Log.d(TAG, "AuthState changed");
@@ -74,7 +68,7 @@ public class User {
         this(email, password);
         this.username = username;
         this.type = type;
-        this.loginAttempts = 0;
+        //int loginAttempts = 0;
     }
 
     /**
@@ -171,19 +165,21 @@ public class User {
         });
 
     }
-    /**
-     * Method to increment user logins. Used for security
-     */
-    public void incrementLogins() {
-        this.loginAttempts++;
-    }
+// --Commented out by Inspection START (11/10/2017 12:03 AM):
+//    /**
+//     * Method to increment user logins. Used for security
+//     */
+//    public void incrementLogins() {
+//        this.loginAttempts++;
+//    }
+// --Commented out by Inspection STOP (11/10/2017 12:03 AM)
 
 
     /**
      * Method to return whether or not a given user is an admin
      * @return whether or not a particular instance is an admin
      */
-    public boolean isAdmin() {
+    private boolean isAdmin() {
         return type == UserType.ADMIN;
     }
 

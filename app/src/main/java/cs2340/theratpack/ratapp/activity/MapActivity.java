@@ -37,10 +37,8 @@ import cs2340.theratpack.ratapp.model.RatModel;
 public class MapActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback, DatePickerDialog.OnDateSetListener {
     private static final String TAG = "Activity2";
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
-    private RatModel ratModel = RatModel.INSTANCE;
+    private final RatModel ratModel = RatModel.INSTANCE;
     private GoogleMap mMap;
 
 
@@ -66,8 +64,8 @@ public class MapActivity extends AppCompatActivity
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 Log.d(TAG, "AuthState changed");
@@ -126,7 +124,7 @@ public class MapActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 

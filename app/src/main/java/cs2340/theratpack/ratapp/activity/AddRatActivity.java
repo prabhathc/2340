@@ -19,11 +19,9 @@ import cs2340.theratpack.ratapp.model.RatModel;
 public class AddRatActivity extends AppCompatActivity {
 
 
-    private String uniqueKey = "" + (int) Math.floor(Math.random()*100);
-    private double latitude = 40.730610;
-    private double longitude = 	-73.935242;
-    private long createdDate = (new Date()).getTime();
-    private static RatModel ratModel = RatModel.INSTANCE;
+    private final String uniqueKey = "" + (int) Math.floor(Math.random()*100);
+    private final long createdDate = (new Date()).getTime();
+    private static final RatModel ratModel = RatModel.INSTANCE;
 
 
 
@@ -62,10 +60,12 @@ public class AddRatActivity extends AppCompatActivity {
         mCity = (EditText) findViewById(R.id.city);
         mBorough = (EditText) findViewById(R.id.borough);
     }
-    /**
-     * Tag for logging purposes
-     */
-    private static final String TAG = "AddRatActivity";
+// --Commented out by Inspection START (11/10/2017 12:02 AM):
+//    /**
+//     * Tag for logging purposes
+//     */
+//    private static final String TAG = "AddRatActivity";
+// --Commented out by Inspection STOP (11/10/2017 12:02 AM)
 
     private void attemptUploadRat () {
         // Reset errors.
@@ -131,14 +131,18 @@ public class AddRatActivity extends AppCompatActivity {
     }
 
     private void createRat(String locationType, String incidentZip, String incidentAddress, String city, String borough) {
-        Rat rat = new Rat(uniqueKey,createdDate,locationType,incidentZip,incidentAddress,city,borough,longitude,latitude);
+        double latitude = 40.730610;
+        double longitude = -73.935242;
+        Rat rat = new Rat(uniqueKey,createdDate,locationType,incidentZip,incidentAddress,city,borough, longitude, latitude);
 
         ratModel.add(rat);
         startActivity(new Intent(AddRatActivity.this, MapActivity.class));
     }
 
-    public RatModel getModel() {
-        return ratModel;
-    }
+// --Commented out by Inspection START (11/10/2017 12:02 AM):
+//    public RatModel getModel() {
+//        return ratModel;
+//    }
+// --Commented out by Inspection STOP (11/10/2017 12:02 AM)
 
 }

@@ -2,12 +2,8 @@ package cs2340.theratpack.ratapp.model;
 import com.google.firebase.database.DataSnapshot;
 
 
-/**
- * Created by prabhath on 10/11/2017.
- */
-
 public class Rat {
-    private static final String TAG = "Rat";
+    // --Commented out by Inspection (11/10/2017 9:48 PM):private static final String TAG = "Rat";
     private String uniqueKey;
     private long createdDate;
     private String locationType;
@@ -28,7 +24,7 @@ public class Rat {
                 (String)ratData.child("Incident Address").getValue(), (String)ratData.child("City").getValue(),
                 (String)ratData.child("Borough").getValue(), Double.parseDouble((String)ratData.child("Longitude").getValue()),
                 Double.parseDouble((String)ratData.child("Latitude").getValue()));
-        DataSnapshot ratData1 = ratData;
+        //DataSnapshot ratData1 = ratData;
     }
 
     /**
@@ -57,7 +53,7 @@ public class Rat {
         this.longitude = longitude;
     }
 
-    public void setUniqueKey(String newKey) {
+    /*public void setUniqueKey(String newKey) {
         uniqueKey = newKey;
     }
 
@@ -92,6 +88,7 @@ public class Rat {
     public void setLongitude(double newLong) {
         longitude = newLong;
     }
+    */
 
     public String getUniqueKey() {
         return uniqueKey;

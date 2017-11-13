@@ -32,7 +32,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="false"
-            android:text="Test Range" />
+            android:text="@string/testrange"
+            />
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/chart"
