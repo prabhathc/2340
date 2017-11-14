@@ -35,6 +35,9 @@ import java.util.List;
 
 import cs2340.theratpack.ratapp.R;
 
+/**
+ * This is the activity for the graph view of the app
+ */
 public class GraphActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DatePickerDialog.OnDateSetListener{
 
@@ -46,6 +49,10 @@ public class GraphActivity extends AppCompatActivity
     private List<String> labels;
 
 
+    /**
+     * Create Method sets up firebase authentication and button/action bar listeners
+     * @param savedInstanceState saved state, if there is one
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +96,11 @@ public class GraphActivity extends AppCompatActivity
             }
         });
     }
+
+
+    /**
+     * What happens when you press back while the drawer is open
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -99,7 +111,11 @@ public class GraphActivity extends AppCompatActivity
         }
     }
 
-
+    /**
+     * List of things that can be done in the drawer
+     * @param item the item selected in the drawer
+     * @return returns true if drawer is closed
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -120,6 +136,11 @@ public class GraphActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * List of things that can be done in the drawer
+     * @param item the item selected in the drawer
+     * @return returns true if drawer is closed
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -140,7 +161,17 @@ public class GraphActivity extends AppCompatActivity
         return true;
     }
 
-   @Override
+    /**
+     * Applies changes to graph view based on date selected
+     * @param view The view of the date picker
+     * @param year start year of the range
+     * @param monthOfYear start month of the range
+     * @param dayOfMonth start day of the range
+     * @param yearEnd end year of the range
+     * @param monthOfYearEnd end month of the range
+     * @param dayOfMonthEnd end day of the range
+     */
+    @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
         //call rats in range on a per month+year basis
         //make sure to account for irregularly selected number of days on the tail months, if less that 1 or 2 months
@@ -194,12 +225,19 @@ public class GraphActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Actually setting the bar chart stuff. A utility method used by on data set
+     * Gets the actual rats in in the date/time range
+     * @param startTime start time in unix time (times 1000)
+     * @param endTime end time in unix time (times 1000)
+     * @param monthYear label of the month and year for the bar
+     * @param last is this the last
+     */
     private void ratsInRange(long startTime, long endTime, final int monthYear, final boolean last) {
         mDatabase.child("rat sightings").orderByChild("Created Date").startAt(String.valueOf(startTime))
                 .endAt(String.valueOf(endTime)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Iterable<DataSnapshot> ratSnaps = dataSnapshot.getChildren();
                 long count = dataSnapshot.getChildrenCount();
 
                 entries.add(new BarEntry(monthYear, count));
