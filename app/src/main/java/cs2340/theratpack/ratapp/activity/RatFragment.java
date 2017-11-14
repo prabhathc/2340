@@ -65,7 +65,7 @@ public class RatFragment extends Fragment {
         //Show the data in a TextView
         if (ratSighting != null) {
             Log.d(TAG, "About to set key");
-            ((TextView) rootView.findViewById(R.id.id2)).setText("" + ratSighting.getUniqueKey());
+            ((TextView) rootView.findViewById(R.id.id2)).setText((Integer.valueOf(ratSighting.getUniqueKey()).toString()));
             Log.d(TAG, "Getting ready to set Created Date");
             ((TextView) rootView.findViewById(R.id.createdDate)).setText(new Date(ratSighting.getCreatedDate()).toString());
 
@@ -79,9 +79,9 @@ public class RatFragment extends Fragment {
 
             ((TextView) rootView.findViewById(R.id.borough)).setText(ratSighting.getBorough());
 
-            ((TextView) rootView.findViewById(R.id.lat)).setText("" + ratSighting.getLatitude());
+            ((TextView) rootView.findViewById(R.id.lat)).setText((Double.valueOf(ratSighting.getLatitude()).toString()));
 
-            ((TextView) rootView.findViewById(R.id.lng)).setText("" + ratSighting.getLongitude());
+            ((TextView) rootView.findViewById(R.id.lng)).setText((Double.valueOf(ratSighting.getLongitude()).toString()));
 
         }
         return rootView;

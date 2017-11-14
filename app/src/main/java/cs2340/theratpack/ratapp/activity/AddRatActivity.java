@@ -67,6 +67,9 @@ public class AddRatActivity extends AppCompatActivity {
 //    private static final String TAG = "AddRatActivity";
 // --Commented out by Inspection STOP (11/10/2017 12:02 AM)
 
+    /**
+     * Method that
+     */
     private void attemptUploadRat () {
         // Reset errors.
         mLocationType.setError(null);

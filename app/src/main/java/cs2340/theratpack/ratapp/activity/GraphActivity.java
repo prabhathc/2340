@@ -42,7 +42,7 @@ public class GraphActivity extends AppCompatActivity
     private DatabaseReference mDatabase;
     private BarChart chart;
     private List<BarEntry> entries;
-    private BarData barData = null;
+    private final BarData barData = null;
     private List<String> labels;
 
 

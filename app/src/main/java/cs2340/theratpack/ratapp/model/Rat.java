@@ -4,15 +4,15 @@ import com.google.firebase.database.DataSnapshot;
 
 public class Rat {
     // --Commented out by Inspection (11/10/2017 9:48 PM):private static final String TAG = "Rat";
-    private String uniqueKey;
-    private long createdDate;
-    private String locationType;
-    private String incidentZip;
-    private String incidentAddress;
-    private String city;
-    private String borough;
-    private double latitude;
-    private double longitude;
+    private final String uniqueKey;
+    private final long createdDate;
+    private final String locationType;
+    private final String incidentZip;
+    private final String incidentAddress;
+    private final String city;
+    private final String borough;
+    private final double latitude;
+    private final double longitude;
 
     /**
      * Call this when you're pulling from firebase

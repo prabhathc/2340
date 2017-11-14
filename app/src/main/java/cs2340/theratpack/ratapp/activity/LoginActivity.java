@@ -88,16 +88,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-/*---------Updated upstream
-
-=======
+/*      Updated upstream
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     Log.d(TAG, "onAuthStateChanged:login" +user.getUid());
                 } else {
                     Log.d(TAG, "onAuthStateChanged:logout");
                 }
--------Stashed changes*/
+        Stashed changes*/
             }
         };
 

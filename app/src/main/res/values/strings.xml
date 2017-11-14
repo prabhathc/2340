@@ -2,6 +2,7 @@
     <string name="app_name">RatApp</string>
     <string name="as">Android Studio</string>
     <string name="email">androidstudio@android.com</string>
+    <string name="blank"></string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

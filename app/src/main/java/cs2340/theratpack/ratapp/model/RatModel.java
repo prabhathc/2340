@@ -22,7 +22,15 @@ public class RatModel {
 
     // --Commented out by Inspection (11/10/2017 12:03 AM):public List<Rat> getRats() { return rats; }
 
+    /**
+     * Method to find a particular Rat in the ArrayList backed model
+     * @param key The key for the particular sighting that you are trying to find
+     * @return The rat sighting or null if it is not found
+     */
     public Rat findRatById(String key) {
+        if (key == null) {
+            return null;
+        }
         for (Rat r: rats) {
             if (r.getUniqueKey().equals(key)) return r;
         }
