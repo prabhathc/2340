@@ -29,7 +29,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,43 +61,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             "foo@example.com:hello", "bar@example.com:world"
     };*/
 
-    /**
-     * Firebase authentication stuff
-     */
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-
+    /**
+     * Function sets up interactive login screen aka is the normal static set up.
+     * @param savedInstanceState Is info regarding the activity's previously frozen state, if there
+     *                           was one.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-/*      Updated upstream
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    Log.d(TAG, "onAuthStateChanged:login" +user.getUid());
-                } else {
-                    Log.d(TAG, "onAuthStateChanged:logout");
-                }
-        Stashed changes*/
-            }
-        };
-
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -138,14 +114,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
     }
 
+    /**
+     * Is called when activity becomes visible to the user.
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    /**
+     * Is called when activity is no longer visible to the user.
+     */
     @Override
     public void onStop() {
         super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
     }
 
+    /**
+     * Auto-completes text while user is typing.
+     */
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -154,6 +141,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         getLoaderManager().initLoader(0, null, this);
     }
 
+    /**
+     * Checks if inserted email address has contacts.
+     * @return boolean  Whether or not the inserted email address has contacts.
+     */
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
@@ -178,6 +169,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     /**
      * Callback received when a permissions request has been completed.
+     * @param requestCode   The request code passed in.
+     * @param permissions   List of potential requested permissions.
+     * @param grantResults  The grant results for the corresponding permissions.
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -235,7 +229,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-    private void signIn(String email, String password) {
+    /**
+     * Logs in existing user or creates a new user.
+     * @param email     The email to be attached to the user signing in.
+     * @param password  The password to be attached to the user signing in.
+     */
+    public void signIn(String email, String password) {
         User user = new User(email, password);
         showProgress(false);
         user.login(LoginActivity.this, new Intent(LoginActivity.this, MapActivity.class));
@@ -244,6 +243,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     /**
      * Shows the progress UI and hides the login form.
+     * @param show  Helps determine which APIs are available, and thus determines the visibility of
+     *              relevant UI components.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -278,6 +279,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    /**
+     * Instantiate and return a new Loader for the given ID.
+     * @param i         The ID whose loader is to be created.
+     * @param bundle    Any arguments supplied by the caller.
+     * @return          Return a new Loader instance that is ready to start loading.
+     */
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
@@ -295,6 +302,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
 
+    /**
+     * Called when a previously created loader has finished its load.
+     * @param cursorLoader  The Loader that has finished.
+     * @param cursor        The data generated by the Loader.
+     */
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<>();
@@ -307,11 +319,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         addEmailsToAutoComplete(emails);
     }
 
+    /**
+     * Called when a previously created loader is being reset, and thus making its data unavailable.
+     * @param cursorLoader  The Loader that is being reset.
+     */
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
     }
 
+    /**
+     * Auto-completes the email being typed out while user is typing. The auto-complete options
+     * appear in a dropdown list.
+     * @param emailAddressCollection    The collection of emails to be shown in dropdown list.
+     */
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
@@ -321,7 +342,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView.setAdapter(adapter);
     }
 
-
+    /**
+     * Uses data attached to user's email.
+     */
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,

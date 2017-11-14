@@ -41,7 +41,10 @@ public class MapActivity extends AppCompatActivity
     private final RatModel ratModel = RatModel.INSTANCE;
     private GoogleMap mMap;
 
-
+    /**
+     * This is the on create method for map activity this sets up the main map activity
+     * @param savedInstanceState the current instance you are now
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +93,10 @@ public class MapActivity extends AppCompatActivity
         });
     }
 
+    /**
+     * This method takes you back the current screen after you press on the navigation out of or
+     * back from the navigation menu
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -100,7 +107,11 @@ public class MapActivity extends AppCompatActivity
         }
     }
 
-
+    /**
+     * A method to choose what the next screen will be after an item is choosen
+     * @param item The items to populate the navigation drawer
+     * @return True if an item as been selected and move to the next screen
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -122,6 +133,11 @@ public class MapActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Populates the
+     * @param item the items to create
+     * @return
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -143,6 +159,10 @@ public class MapActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Creates the Map for people to view
+     * @param googleMap the map that is being displayed
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "Base map loaded");
@@ -150,6 +170,16 @@ public class MapActivity extends AppCompatActivity
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.0, -73.0), 7));
     }
 
+    /**
+     *From the dates selected by people displays the rats
+     * @param view the of where the selected dates come from
+     * @param year the first date's year
+     * @param monthOfYear the first date's month
+     * @param dayOfMonth the first date's day
+     * @param yearEnd the end date's year
+     * @param monthOfYearEnd the end date's month
+     * @param dayOfMonthEnd the end date's day
+     */
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
         Calendar startDate = Calendar.getInstance();
@@ -157,13 +187,16 @@ public class MapActivity extends AppCompatActivity
         Calendar endDate = Calendar.getInstance();
         endDate.set(yearEnd, monthOfYearEnd, dayOfMonthEnd);
         ratModel.deleteAll();
-        /*if (startDate != null && endDate != null) {
-            ratsInRange(startDate.getTimeInMillis(),endDate.getTimeInMillis());
-        }*/
         ratsInRange(startDate.getTimeInMillis(),endDate.getTimeInMillis());
         Log.d(TAG, "" +startDate.getTimeInMillis());
 
     }
+
+    /**
+     * Displays from two selected times the rats that appear in the time
+     * @param startTime the beginning date
+     * @param endTime the end date
+     */
     private void ratsInRange(long startTime, long endTime) {
         mDatabase.child("rat sightings").orderByChild("Created Date").startAt(String.valueOf(startTime))
                 .endAt(String.valueOf(endTime)).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -171,7 +204,7 @@ public class MapActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> ratSnaps = dataSnapshot.getChildren();
                 //I see two options:
-                //load pins into the map in the for-loop (idk if thats possible due to async processes
+                //load pins into the map in the for-loop (idk if that's possible due to async processes
                 //load all the rats in as they currently are, then execute a separate "pin adding"
                 //idk tho im dumb
                 for (DataSnapshot ratSnap : ratSnaps) {
